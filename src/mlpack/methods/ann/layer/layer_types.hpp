@@ -207,7 +207,8 @@ using MoreTypes = boost::variant<
         Sequential<arma::mat, arma::mat, true>*,
         Subview<arma::mat, arma::mat>*,
         VRClassReward<arma::mat, arma::mat>*,
-        VirtualBatchNorm<arma::mat, arma::mat>*
+        VirtualBatchNorm<arma::mat, arma::mat>*,
+        RBF<arma::mat, arma::mat>*
 >;
 
 template <typename... CustomLayers>
@@ -224,8 +225,8 @@ using LayerTypes = boost::variant<
     BaseLayer<LogisticFunction, arma::mat, arma::mat>*,
     BaseLayer<IdentityFunction, arma::mat, arma::mat>*,
     BaseLayer<TanhFunction, arma::mat, arma::mat>*,
-    BaseLayer<RectifierFunction, arma::mat, arma::mat>*,
     BaseLayer<SoftplusFunction, arma::mat, arma::mat>*,
+    BaseLayer<RectifierFunction, arma::mat, arma::mat>*,
     BaseLayer<GaussianFunction, arma::mat, arma::mat>*,
     BatchNorm<arma::mat, arma::mat>*,
     BilinearInterpolation<arma::mat, arma::mat>*,
@@ -252,7 +253,6 @@ using LayerTypes = boost::variant<
     LayerNorm<arma::mat, arma::mat>*,
     LeakyReLU<arma::mat, arma::mat>*,
     Linear<arma::mat, arma::mat, NoRegularizer>*,
-    RBF<arma::mat, arma::mat>*,
     LinearNoBias<arma::mat, arma::mat, NoRegularizer>*,
     LogSoftMax<arma::mat, arma::mat>*,
     Lookup<arma::mat, arma::mat>*,
