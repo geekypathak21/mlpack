@@ -85,6 +85,8 @@ set(SOURCES
   reinforce_normal_impl.hpp
   reparametrization.hpp
   reparametrization_impl.hpp
+  radial_basis_function.hpp
+  radial_basis_function_impl.hpp
   select.hpp
   select_impl.hpp
   sequential.hpp

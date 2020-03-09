@@ -13,6 +13,7 @@ set(SOURCES
   gelu_function.hpp
   elliot_function.hpp
   elish_function.hpp
+  gaussian_function.hpp
 )
 
 # Add directory name to sources.
