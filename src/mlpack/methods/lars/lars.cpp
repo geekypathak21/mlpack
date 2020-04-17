@@ -107,78 +107,30 @@ LARS::LARS(LARS&& other) :
     ignoreSet(std::move(other.ignoreSet)),
     isIgnored(std::move(other.isIgnored))
 {
-  // Clean the other object to prevent to objects pointing
-  // at the memory location.
-  if (other.matGram)
-    delete other.matGram;
-
-  other.matGram = new arma::mat(other.matGramInternal);
-  other.lambda1 = 0.0;
-  other.lambda2 = 0.0;
 }
 
-// Copy operator.
-LARS& LARS::operator=(const LARS& other)
+void LARS::Swap(LARS& network)
 {
-  if (&other == this)
-    return *this;
-
-  // Clean the memory first.
-  if (matGram)
-    delete matGram;
-
-  matGramInternal = other.matGramInternal;
-  matGram = &matGramInternal;
-  matUtriCholFactor = other.matUtriCholFactor;
-  useCholesky = other.useCholesky;
-  lasso = other.lasso;
-  lambda1 = other.lambda1;
-  lambda2 = other.lambda2;
-  elasticNet = other.elasticNet;
-  tolerance = other.tolerance;
-  betaPath = other.betaPath;
-  lambdaPath = other.lambdaPath;
-  activeSet = other.activeSet;
-  isActive = other.isActive;
-  ignoreSet = other.ignoreSet;
-  isIgnored = other.isIgnored;
-  return *this;
+  std::swap(matGram, network.matGram);
+  std::swap(matGramInternal, network.matGramInternal);
+  std::swap(matUtriCholFactor, network.matUtriCholFactor);
+  std::swap(useCholesky, network.useCholesky);
+  std::swap(lasso, network.lasso);
+  std::swap(lambda1, network.lambda1);
+  std::swap(lambda2, network.lambda2);
+  std::swap(elasticNet, network.elasticNet);
+  std::swap(tolerance, network.tolerance);
+  std::swap(betaPath, network.betaPath);
+  std::swap(lambdaPath, network.lambdaPath);
+  std::swap(activeSet, network.activeSet);
+  std::swap(isActive, network.isActive);
+  std::swap(ignoreSet, network.ignoreSet);
+  std::swap(isIgnored, network.isIgnored);
 }
 
-// Move Operator.
-LARS& LARS::operator=(LARS&& other)
+LARS& LARS::operator=(LARS network)
 {
-  if (&other == this)
-    return *this;
-
-  // Clean the memory first.
-  if (matGram)
-    delete matGram;
-
-  matGramInternal = std::move(other.matGramInternal);
-  matGram = other.matGram;
-  matUtriCholFactor = std::move(other.matUtriCholFactor);
-  useCholesky = other.useCholesky;
-  lasso = other.lasso;
-  lambda1 = other.lambda1;
-  lambda2 = other.lambda2;
-  elasticNet = other.elasticNet;
-  tolerance = other.tolerance;
-  betaPath = std::move(other.betaPath);
-  lambdaPath = std::move(other.lambdaPath);
-  activeSet = std::move(other.activeSet);
-  isActive = std::move(other.isActive);
-  ignoreSet = std::move(other.ignoreSet);
-  isIgnored = std::move(other.isIgnored);
-
-  // Clean the other object to prevent to objects pointing
-  // at the memory location.
-  if (other.matGram)
-    delete other.matGram;
-
-  other.matGram = new arma::mat(other.matGramInternal);
-  other.lambda1 = 0.0;
-  other.lambda2 = 0.0;
+  Swap(network);
   return *this;
 }
 

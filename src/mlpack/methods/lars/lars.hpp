@@ -184,19 +184,8 @@ class LARS
    */
   LARS(LARS&& other);
 
-  /**
-   * Copy the given LARS object.
-   *
-   * @param other LARS object to copy.
-   */
-  LARS &operator=(const LARS& other);
-
-  /**
-   * Take ownership of the given LARS object.
-   *
-   * @param other LARS object to take ownership of.
-   */
-  LARS &operator=(LARS&& other);
+  //! Copy/move assignment operator.
+  LARS& operator = (LARS);
 
   /**
    * Run LARS.  The input matrix (like all mlpack matrices) should be
@@ -289,6 +278,14 @@ class LARS
                       const bool rowMajor = false);
 
  private:
+
+ /**
+   * Swap the content of this network with given network.
+   *
+   * @param network Desired source network.
+   */
+  void Swap(LARS& network);
+
   //! Gram matrix.
   arma::mat matGramInternal;
 
