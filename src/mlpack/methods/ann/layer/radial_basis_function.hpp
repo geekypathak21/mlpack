@@ -128,6 +128,12 @@ class RBF
   void serialize(Archive& ar, const unsigned int /* version */);
 
  private:
+  //! Locally-stored number of input units.
+  size_t inSize;
+
+  //! Locally-stored number of output units.
+  size_t outSize;
+
   //! Locally-stored delta object.
   OutputDataType delta;
 
@@ -142,15 +148,6 @@ class RBF
 
   //! Locally-stored the output distances of the shape.
   OutputDataType distances;
-
-  //! Locally-stored reset parameter used to initialize the layer once.
-  bool reset;
-
-  //! Locally-stored number of input units.
-  size_t inSize;
-
-  //! Locally-stored number of output units.
-  size_t outSize;
 }; // class RBF
 
 } // namespace ann

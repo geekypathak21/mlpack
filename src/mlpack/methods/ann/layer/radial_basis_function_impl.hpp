@@ -20,8 +20,7 @@ namespace ann /** Artificial Neural Network. */ {
 template<typename InputDataType, typename OutputDataType>
 RBF<InputDataType, OutputDataType>::RBF() :
     inSize(0),
-    outSize(0),
-    reset(false)
+    outSize(0)
 {
   // Nothing to do here.
 }
@@ -33,8 +32,7 @@ RBF<InputDataType, OutputDataType>::RBF(
     arma::mat& centres) :
     inSize(inSize),
     outSize(outSize),
-    centres(centres),
-    reset(false)
+    centres(centres)
 {
 }
 
