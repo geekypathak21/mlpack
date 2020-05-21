@@ -23,11 +23,20 @@ namespace ann /** Artificial Neural Network. */ {
 
 
 /**
-/**
  * Implementation of the Radial Basis Function layer. The RBF class when use with a 
  * non-linear activation function acts as a Radial Basis Function which can be used
  * with Feed-Forward neural network.
  *
+ * For more information, refer to the following paper,
+ *
+ * @code
+ * @article{Volume 51: Artificial Intelligence and Statistics,
+ *   author  = {Qichao Que, Mikhail Belkin},
+ *   title   = {Back to the Future: Radial Basis Function Networks Revisited},
+ *   year    = {2016},
+ *   url     = {http://proceedings.mlr.press/v51/que16.pdf},
+ * }
+ * @endcode
  *
  * @tparam InputDataType Type of the input data (arma::colvec, arma::mat,
  *         arma::sp_mat or arma::cube).
@@ -51,15 +60,11 @@ class RBF
    *
    * @param inSize The number of input units.
    * @param outSize The number of output units.
+   * @param centres The centres calculated using k-means of data.
    */
   RBF(const size_t inSize,
       const size_t outSize,
       arma::mat& centres);
-
-  /**
-   * Reset the layer parameter.
-   */
-  void Reset();
 
   /**
    * Ordinary feed forward pass of the radial basis function.
@@ -132,9 +137,6 @@ class RBF
   //! Locally-stored the learnable centre of the shape.
   InputDataType centres;
 
-  //! Locally-stored the learnable scaling factor of the shape.
-  InputDataType sigmas;
-
   //! Locally-stored input parameter object.
   InputDataType inputParameter;
 
@@ -149,7 +151,6 @@ class RBF
 
   //! Locally-stored number of output units.
   size_t outSize;
-
 }; // class RBF
 
 } // namespace ann

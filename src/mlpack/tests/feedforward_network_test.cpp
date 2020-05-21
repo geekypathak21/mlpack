@@ -660,7 +660,7 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   kmeans.Cluster(trainData, 8, centroids);
 
   FFN<NegativeLogLikelihood<> > model;
-  model.Add<RBF<> >(trainData.n_rows, 8, centroids); 
+  model.Add<RBF<> >(trainData.n_rows, 8, centroids);
   model.Add<Linear<> >(8, 3);
   model.Add<LogSoftMax<> >();
 
@@ -678,7 +678,6 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   labels.submat(0, labels.n_cols / 2, 0, labels.n_cols - 1).fill(1);
   labels += 1;
 
-  
   arma::mat centroids1;
   arma::Row<size_t> assignments;
   KMeans<> kmeans1;

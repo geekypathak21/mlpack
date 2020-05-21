@@ -39,23 +39,11 @@ RBF<InputDataType, OutputDataType>::RBF(
 }
 
 template<typename InputDataType, typename OutputDataType>
-void RBF<InputDataType, OutputDataType>::Reset()
-{
-}
-
-template<typename InputDataType, typename OutputDataType>
 template<typename eT>
 void RBF<InputDataType, OutputDataType>::Forward(
     const arma::Mat<eT>& input,
     arma::Mat<eT>& output)
 {
-  if(!reset)
-  {
-    arma::mat sigmas = arma::mat(1, outSize);
-    sigmas.ones();
-    sigmas = sigmas / outSize;
-    reset = true;
-  }
   distances = arma::mat(outSize, input.n_cols);
 
   for (size_t i = 0; i < input.n_cols; i++)
@@ -66,7 +54,7 @@ void RBF<InputDataType, OutputDataType>::Forward(
                                  2), 0), 0.5).t();
   }
 
-  output = distances;
+  output = arma::exp(-1 * arma::pow(distances, 2));
 }
 
 template<typename InputDataType, typename OutputDataType>
@@ -86,7 +74,6 @@ void RBF<InputDataType, OutputDataType>::serialize(
     const unsigned int /* version */)
 {
   ar & BOOST_SERIALIZATION_NVP(distances);
-  ar & BOOST_SERIALIZATION_NVP(sigmas);
   ar & BOOST_SERIALIZATION_NVP(centres);
 }
 
