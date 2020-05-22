@@ -688,7 +688,7 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   model1.Add<Linear<> >(10, 2);
   model1.Add<LogSoftMax<> >();
   // Vanilla neural net with logistic activation function.
-  TestNetwork<>(model1, dataset, labels, dataset, labels, 20, 0.3);
+  TestNetwork<>(model1, dataset, labels, dataset, labels, 20, 0.31);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
