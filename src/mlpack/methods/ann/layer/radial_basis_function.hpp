@@ -14,7 +14,7 @@
 #define MLPACK_METHODS_ANN_LAYER_RBF_HPP
 
 #include <mlpack/prereqs.hpp>
-#include <mlpack/methods/ann/regularizer/no_regularizer.hpp>
+#include <mlpack/methods/ann/activation_functions/gaussian_function.hpp>
 
 #include "layer_types.hpp"
 
@@ -46,7 +46,8 @@ namespace ann /** Artificial Neural Network. */ {
 
 template <
     typename InputDataType = arma::mat,
-    typename OutputDataType = arma::mat
+    typename OutputDataType = arma::mat,
+    typename Activation = GaussianFunction
 >
 class RBF
 {

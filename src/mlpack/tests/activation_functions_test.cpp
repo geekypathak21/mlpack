@@ -26,6 +26,7 @@
 #include <mlpack/methods/ann/activation_functions/gelu_function.hpp>
 #include <mlpack/methods/ann/activation_functions/elliot_function.hpp>
 #include <mlpack/methods/ann/activation_functions/elish_function.hpp>
+#include <mlpack/methods/ann/activation_functions/gaussian_function.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include "test_tools.hpp"
@@ -933,6 +934,31 @@ BOOST_AUTO_TEST_CASE(CELUFunctionTest)
 
   CheckCELUActivationCorrect(activationData, desiredActivations);
   CheckCELUDerivativeCorrect(desiredActivations, desiredDerivatives);
+}
+
+
+/**
+ * Basic test of the Gaussian activation function.
+ */
+BOOST_AUTO_TEST_CASE(GaussianFunctionTest)
+{
+  const arma::colvec desiredActivations("0.018315639 0.000035713 \
+                                         1.6052280551856116e-09 \
+                                         0 0.367879441 0.367879441 \
+                                         0.018315639 1");
+
+  const arma::colvec desiredDerivatives("-0.036618991635992616 \
+                                         -0.0000714259999 \
+                                         -0.0000000032104561 \
+                                         0 -0.6426287436 \
+                                         -0.642628743680 \
+                                         -0.03661899163 \
+                                         -0.73575888234");
+
+  CheckActivationCorrect<GaussianFunction>(activationData,
+                                           desiredActivations);
+  CheckDerivativeCorrect<GaussianFunction>(desiredActivations,
+                                           desiredDerivatives);
 }
 
 BOOST_AUTO_TEST_SUITE_END();

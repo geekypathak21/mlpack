@@ -1,5 +1,5 @@
 /**
- * @file radial_basis_impl.hpp
+ * @file radial_basis_function_impl.hpp
  * @author Himanshu Pathak
  *
  *
@@ -12,21 +12,23 @@
 #define MLPACK_METHODS_ANN_LAYER_RBF_IMPL_HPP
 
 // In case it hasn't yet been included.
-#include "dropout.hpp"
+#include "radial_basis_function.hpp"
 
 namespace mlpack {
 namespace ann /** Artificial Neural Network. */ {
 
-template<typename InputDataType, typename OutputDataType>
-RBF<InputDataType, OutputDataType>::RBF() :
+template<typename InputDataType, typename OutputDataType,
+         typename Activation>
+RBF<InputDataType, OutputDataType, Activation>::RBF() :
     inSize(0),
     outSize(0)
 {
   // Nothing to do here.
 }
 
-template<typename InputDataType, typename OutputDataType>
-RBF<InputDataType, OutputDataType>::RBF(
+template<typename InputDataType, typename OutputDataType,
+         typename Activation>
+RBF<InputDataType, OutputDataType, Activation>::RBF(
     const size_t inSize,
     const size_t outSize,
     arma::mat& centres) :
@@ -36,9 +38,10 @@ RBF<InputDataType, OutputDataType>::RBF(
 {
 }
 
-template<typename InputDataType, typename OutputDataType>
+template<typename InputDataType, typename OutputDataType,
+         typename Activation>
 template<typename eT>
-void RBF<InputDataType, OutputDataType>::Forward(
+void RBF<InputDataType, OutputDataType, Activation>::Forward(
     const arma::Mat<eT>& input,
     arma::Mat<eT>& output)
 {
@@ -51,13 +54,14 @@ void RBF<InputDataType, OutputDataType>::Forward(
                                  arma::pow((temp),
                                  2), 0), 0.5).t();
   }
-
-  output = arma::exp(-1 * arma::pow(distances, 2));
+  Activation activation = Activation();
+  activation.Fn(distances, output);
 }
 
-template<typename InputDataType, typename OutputDataType>
+template<typename InputDataType, typename OutputDataType,
+         typename Activation>
 template<typename eT>
-void RBF<InputDataType, OutputDataType>::Backward(
+void RBF<InputDataType, OutputDataType, Activation>::Backward(
     const arma::Mat<eT>& /* input */,
     const arma::Mat<eT>& gy,
     arma::Mat<eT>& g)
@@ -65,9 +69,10 @@ void RBF<InputDataType, OutputDataType>::Backward(
   g = centres.t() * gy;
 }
 
-template<typename InputDataType, typename OutputDataType>
+template<typename InputDataType, typename OutputDataType,
+         typename Activation>
 template<typename Archive>
-void RBF<InputDataType, OutputDataType>::serialize(
+void RBF<InputDataType, OutputDataType, Activation>::serialize(
     Archive& ar,
     const unsigned int /* version */)
 {
