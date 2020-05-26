@@ -141,6 +141,9 @@ class RBF
   //! Locally-stored output parameter object.
   OutputDataType outputParameter;
 
+  //! Locally-stored the sigmas values.
+  InputDataType sigmas;
+
   //! Locally-stored the learnable centre of the shape.
   InputDataType centres;
 

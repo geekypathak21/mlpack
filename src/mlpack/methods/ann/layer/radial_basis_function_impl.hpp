@@ -36,6 +36,7 @@ RBF<InputDataType, OutputDataType, Activation>::RBF(
     outSize(outSize),
     centres(centres)
 {
+  sigmas = arma::ones(outSize, 1);
 }
 
 template<typename InputDataType, typename OutputDataType,
@@ -46,6 +47,7 @@ void RBF<InputDataType, OutputDataType, Activation>::Forward(
     arma::Mat<eT>& output)
 {
   distances = arma::mat(outSize, input.n_cols);
+  arma::mat betas;
 
   for (size_t i = 0; i < input.n_cols; i++)
   {
@@ -54,8 +56,26 @@ void RBF<InputDataType, OutputDataType, Activation>::Forward(
                                  arma::pow((temp),
                                  2), 0), 0.5).t();
   }
+  if(input.n_cols > 1)
+  {
+    if (sigmas(0) == 1)
+    {
+      sigmas = arma::mean(distances, 1);
+    }
+    else
+    {
+      sigmas = (sigmas + arma::mean(distances, 1))/2;
+    }
+  }
+  betas = 1 / (1.414 * sigmas);
+  std::cout<<sigmas<<std::endl<<"yes";;
+  arma::mat x = arma::mat(outSize, input.n_cols);
+  for (size_t i = 0; i < outSize; i++)
+  {
+    x.row(i) = distances.row(i) * arma::accu(betas.row(i));
+  }
   Activation activation = Activation();
-  activation.Fn(distances, output);
+  activation.Fn(x, output);
 }
 
 template<typename InputDataType, typename OutputDataType,
