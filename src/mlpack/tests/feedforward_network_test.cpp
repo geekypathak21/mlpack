@@ -694,8 +694,22 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
 
   // Calculating the mean squared error on the training data.
   model1.Predict(dataset, prediction);
-  double trainError = arma::mean(arma::mean(arma::square(prediction - labels)));
-  BOOST_REQUIRE_LE(trainError, 0.2);
+
+  for(size_t i=0; i < prediction.n_elem;i++)
+  {
+    if(prediction(i)>1.5)
+    {
+      prediction(i) = 2;
+    }
+    else
+    {
+      prediction(i) = 1;
+    }
+  }
+  size_t correct = arma::accu(prediction == labels);
+  double classificationError = 1 - double(correct) / testData.n_cols;
+  
+  BOOST_REQUIRE_LE(classificationError, 0.2);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
