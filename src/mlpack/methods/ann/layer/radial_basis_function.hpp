@@ -88,18 +88,6 @@ class RBF
                 const arma::Mat<eT>& gy,
                 arma::Mat<eT>& g);
 
-  /*
-   * Calculate the gradient using the output delta and the input activation.
-   *
-   * @param input The input parameter used for calculating the gradient.
-   * @param error The calculated error.
-   * @param gradient The calculated gradient.
-   */
-  template<typename eT>
-  void Gradient(const arma::Mat<eT>& input,
-                const arma::Mat<eT>& error,
-                arma::Mat<eT>& gradient);
-
   //! Get the output parameter.
   OutputDataType const& OutputParameter() const { return outputParameter; }
   //! Modify the output parameter.

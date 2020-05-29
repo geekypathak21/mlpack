@@ -68,15 +68,16 @@ void RBF<InputDataType, OutputDataType, Activation>::Forward(
     }
   }
   betas = 1 / (1.414 * sigmas);
-  std::cout<<sigmas<<std::endl<<"yes";;
   arma::mat x = arma::mat(outSize, input.n_cols);
+
   for (size_t i = 0; i < outSize; i++)
   {
     x.row(i) = distances.row(i) * arma::accu(betas.row(i));
   }
-  Activation activation = Activation();
-  activation.Fn(x, output);
+
+  Activation::Fn(x, output);
 }
+
 
 template<typename InputDataType, typename OutputDataType,
          typename Activation>
@@ -86,7 +87,6 @@ void RBF<InputDataType, OutputDataType, Activation>::Backward(
     const arma::Mat<eT>& gy,
     arma::Mat<eT>& g)
 {
-  g = centres.t() * gy;
 }
 
 template<typename InputDataType, typename OutputDataType,

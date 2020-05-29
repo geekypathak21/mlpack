@@ -683,12 +683,19 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   KMeans<> kmeans1;
   kmeans1.Cluster(dataset, 10, centroids1);
 
-  FFN<NegativeLogLikelihood<> > model1;
+  FFN<MeanSquaredError<> > model1;
   model1.Add<RBF<> >(dataset.n_rows, 10, centroids1);
-  model1.Add<Linear<> >(10, 2);
-  model1.Add<LogSoftMax<> >();
-  // Vanilla neural net with logistic activation function.
-  TestNetwork<>(model1, dataset, labels, dataset, labels, 20, 0.2);
+  model1.Add<Linear<> >(10, 1);
+
+  ens::RMSProp opt(0.01, 32, 0.88, 1e-8, 10 * dataset.n_cols, -1);
+  model1.Train(dataset, labels, opt);
+
+  arma::mat prediction;
+
+  // Calculating the mean squared error on the training data.
+  model1.Predict(dataset, prediction);
+  double trainError = arma::mean(arma::mean(arma::square(prediction - labels)));
+  BOOST_REQUIRE_LE(trainError, 0.2);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
