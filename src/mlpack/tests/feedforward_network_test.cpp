@@ -665,8 +665,9 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   model.Add<LogSoftMax<> >();
 
   TestNetwork<>(model, trainData, trainLabels, testData, testLabels, 10, 0.1);
+
   arma::mat dataset;
-  dataset.load("mnist_first250_training_4s_and_9s.arm");
+  dataset.load("/home/himanshu/Desktop/rbf/mlpack/build/mnist_first250_training_4s_and_9s.arm");
 
   // Normalize each point since these are images.
   for (size_t i = 0; i < dataset.n_cols; ++i)
@@ -676,19 +677,40 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
 
   arma::mat labels = arma::zeros(1, dataset.n_cols);
   labels.submat(0, labels.n_cols / 2, 0, labels.n_cols - 1).fill(1);
+  arma::mat labels1 = arma::zeros(2, dataset.n_cols);
+  for(size_t i = 0; i < dataset.n_cols; i++)
+  {
+    labels1.col(i).row(labels(i)) = 1;
+  }
   labels += 1;
+
 
   arma::mat centroids1;
   arma::Row<size_t> assignments;
   KMeans<> kmeans1;
-  kmeans1.Cluster(dataset, 75, centroids1);
+  kmeans1.Cluster(dataset, 20, centroids1);
 
-  FFN<NegativeLogLikelihood<> > model1;
-  model1.Add<RBF<> >(dataset.n_rows, 75, centroids1);
-  model1.Add<Linear<> >(75, 2);
-  model1.Add<LogSoftMax<> >();
+  FFN<MeanSquaredError<> > model1;
+  model1.Add<RBF<> >(dataset.n_rows, 20, centroids1);
+  model1.Add<Linear<> >(20, 2);
+
   // Vanilla neural net with logistic activation function.
-  TestNetwork<>(model1, dataset, labels, dataset, labels, 20, 0.2);
+  ens::RMSProp opt(0.01, 32, 0.88, 1e-8, 20 * dataset.n_cols, -1);
+  model1.Train(dataset, labels1, opt);
+
+  arma::mat predictionTemp;
+  model1.Predict(dataset, predictionTemp);
+  arma::mat prediction = arma::zeros<arma::mat>(1, predictionTemp.n_cols);
+
+  for (size_t i = 0; i < predictionTemp.n_cols; ++i)
+  {
+    prediction(i) = arma::as_scalar(arma::find(
+        arma::max(predictionTemp.col(i)) == predictionTemp.col(i), 1)) + 1;
+  }
+
+  size_t correct = arma::accu(prediction == labels);
+  double classificationError = 1 - double(correct) / dataset.n_cols;
+  BOOST_REQUIRE_LE(classificationError, 0.2);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
