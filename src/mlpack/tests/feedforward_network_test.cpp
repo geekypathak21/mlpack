@@ -667,7 +667,7 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   TestNetwork<>(model, trainData, trainLabels, testData, testLabels, 10, 0.1);
 
   arma::mat dataset;
-  dataset.load("/home/himanshu/Desktop/rbf/mlpack/build/mnist_first250_training_4s_and_9s.arm");
+  dataset.load("mnist_first250_training_4s_and_9s.arm");
 
   // Normalize each point since these are images.
   for (size_t i = 0; i < dataset.n_cols; ++i)
