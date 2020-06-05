@@ -688,11 +688,11 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   arma::mat centroids1;
   arma::Row<size_t> assignments;
   KMeans<> kmeans1;
-  kmeans1.Cluster(dataset, 20, centroids1);
+  kmeans1.Cluster(dataset, 60, centroids1);
 
   FFN<MeanSquaredError<> > model1;
-  model1.Add<RBF<> >(dataset.n_rows, 20, centroids1);
-  model1.Add<Linear<> >(20, 2);
+  model1.Add<RBF<> >(dataset.n_rows, 60, centroids1);
+  model1.Add<Linear<> >(60, 2);
 
   // Vanilla neural net with logistic activation function.
   ens::RMSProp opt(0.01, 32, 0.88, 1e-8, 20 * dataset.n_cols, -1);
