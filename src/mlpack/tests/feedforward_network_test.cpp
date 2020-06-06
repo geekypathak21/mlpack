@@ -635,6 +635,12 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   arma::mat trainLabels = trainData.row(trainData.n_rows - 1);
   trainData.shed_row(trainData.n_rows - 1);
 
+  arma::mat trainLabels1 = arma::zeros(3, trainData.n_cols);
+  for(size_t i = 0; i < trainData.n_cols; i++)
+  {
+    trainLabels1.col(i).row((trainLabels(i) - 1)) = 1;
+  }
+
   arma::mat testData;
   data::Load("thyroid_test.csv", testData, true);
 
@@ -659,12 +665,12 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   KMeans<> kmeans;
   kmeans.Cluster(trainData, 8, centroids);
 
-  FFN<NegativeLogLikelihood<> > model;
+  FFN<MeanSquaredError<> > model;
   model.Add<RBF<> >(trainData.n_rows, 8, centroids);
   model.Add<Linear<> >(8, 3);
-  model.Add<LogSoftMax<> >();
 
-  TestNetwork<>(model, trainData, trainLabels, testData, testLabels, 10, 0.1);
+  // RBFN neural net with MeanSquaredError.
+  TestNetwork<>(model, trainData, trainLabels1, testData, testLabels, 10, 0.1);
 
   arma::mat dataset;
   dataset.load("mnist_first250_training_4s_and_9s.arm");
@@ -677,6 +683,7 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
 
   arma::mat labels = arma::zeros(1, dataset.n_cols);
   labels.submat(0, labels.n_cols / 2, 0, labels.n_cols - 1).fill(1);
+
   arma::mat labels1 = arma::zeros(2, dataset.n_cols);
   for(size_t i = 0; i < dataset.n_cols; i++)
   {
@@ -694,23 +701,8 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   model1.Add<RBF<> >(dataset.n_rows, 60, centroids1);
   model1.Add<Linear<> >(60, 2);
 
-  // Vanilla neural net with logistic activation function.
-  ens::RMSProp opt(0.01, 32, 0.88, 1e-8, 20 * dataset.n_cols, -1);
-  model1.Train(dataset, labels1, opt);
-
-  arma::mat predictionTemp;
-  model1.Predict(dataset, predictionTemp);
-  arma::mat prediction = arma::zeros<arma::mat>(1, predictionTemp.n_cols);
-
-  for (size_t i = 0; i < predictionTemp.n_cols; ++i)
-  {
-    prediction(i) = arma::as_scalar(arma::find(
-        arma::max(predictionTemp.col(i)) == predictionTemp.col(i), 1)) + 1;
-  }
-
-  size_t correct = arma::accu(prediction == labels);
-  double classificationError = 1 - double(correct) / dataset.n_cols;
-  BOOST_REQUIRE_LE(classificationError, 0.2);
+  // RBFN neural net with MeanSquaredError.
+  TestNetwork<>(model1, dataset, labels1, dataset, labels, 10, 0.2);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
