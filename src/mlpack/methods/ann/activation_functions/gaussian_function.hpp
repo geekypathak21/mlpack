@@ -21,8 +21,8 @@ namespace ann /** Artificial Neural Network. */ {
  * The gaussian function, defined by
  *
  * @f{eqnarray*}{
- * f(x) &=& \frac{1}{e^{-1 * x^2}} \\
- * f'(x) &=& f(x) * -x * 2)
+ * f(x) = e^{-1 * x^2} \\
+ * f'(x) = f(x) * -x * 2 \\
  * @f}
  */
 class GaussianFunction
