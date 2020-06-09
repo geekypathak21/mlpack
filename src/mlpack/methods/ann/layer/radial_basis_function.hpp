@@ -42,7 +42,7 @@ namespace ann /** Artificial Neural Network. */ {
  *         arma::sp_mat or arma::cube).
  * @tparam OutputDataType Type of the output data (arma::colvec, arma::mat,
  *         arma::sp_mat or arma::cube).
- * @tparam Activation Type of the activation function used.
+ * @tparam Activation Type of the activation function (mlpack::ann::Gaussian).
  */
 
 template <
@@ -82,14 +82,11 @@ class RBF
   /**
    * Ordinary feed backward pass of the radial basis function.
    *
-   * @param input The propagated input activation.
-   * @param gy The backpropagated error.
-   * @param g The calculated gradient.
    */
   template<typename eT>
   void Backward(const arma::Mat<eT>& /* input */,
-                const arma::Mat<eT>& gy,
-                arma::Mat<eT>& g);
+                const arma::Mat<eT>& /* gy */,
+                arma::Mat<eT>& /* g */);
 
   //! Get the output parameter.
   OutputDataType const& OutputParameter() const { return outputParameter; }

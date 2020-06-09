@@ -35,8 +35,8 @@ RBF<InputDataType, OutputDataType, Activation>::RBF(
     double betas) :
     inSize(inSize),
     outSize(outSize),
-    centres(centres),
-    betas(betas)
+    betas(betas),
+    centres(centres)
 {
   sigmas = 1;
   if (betas == 0)
@@ -80,8 +80,8 @@ template<typename InputDataType, typename OutputDataType,
 template<typename eT>
 void RBF<InputDataType, OutputDataType, Activation>::Backward(
     const arma::Mat<eT>& /* input */,
-    const arma::Mat<eT>& gy,
-    arma::Mat<eT>& g)
+    const arma::Mat<eT>& /* gy */,
+    arma::Mat<eT>& /* g */)
 {
 }
 

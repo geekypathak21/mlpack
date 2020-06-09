@@ -702,7 +702,7 @@ BOOST_AUTO_TEST_CASE(RBFNetworkTest)
   model1.Add<Linear<> >(60, 2);
 
   // RBFN neural net with MeanSquaredError.
-  TestNetwork<>(model1, dataset, labels1, dataset, labels, 10, 0.1);
+  TestNetwork<>(model1, dataset, labels1, dataset, labels, 10, 0.15);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
