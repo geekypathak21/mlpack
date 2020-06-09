@@ -63,10 +63,12 @@ class RBF
    * @param inSize The number of input units.
    * @param outSize The number of output units.
    * @param centres The centres calculated using k-means of data.
+   * @param betas The beta value to be used with centres.
    */
   RBF(const size_t inSize,
       const size_t outSize,
-      arma::mat& centres);
+      arma::mat& centres,
+      double betas = 0);
 
   /**
    * Ordinary feed forward pass of the radial basis function.
@@ -131,7 +133,10 @@ class RBF
   OutputDataType outputParameter;
 
   //! Locally-stored the sigmas values.
-  InputDataType sigmas;
+  double sigmas;
+
+  //! Locally-stored the betas values.
+  double betas;
 
   //! Locally-stored the learnable centre of the shape.
   InputDataType centres;
