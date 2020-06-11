@@ -71,7 +71,7 @@ void RBF<InputDataType, OutputDataType, Activation>::Forward(
                                  2), 0), 0.5).t();
   }
 
-  Activation::Fn(distances % std::pow(2 * betas, 0.5), output);
+  Activation::Fn(distances / std::pow(2 * betas, 0.5), output);
 }
 
 
