@@ -591,6 +591,16 @@ class FFN
 
   // RNN will call `CheckNetwork()`, which is private.
   friend class RNN<OutputLayerType, InitializationRuleType, MatType>;
+
+  // The GAN class should have access to internal members.
+  template<
+    typename Model,
+    typename InitializerType,
+    typename NoiseType,
+    typename PolicyType,
+    typename MatTypeFriend
+  >
+  friend class GAN;
 }; // class FFN
 
 } // namespace mlpack

@@ -74,42 +74,42 @@ TEST_CASE("WGANMNISTTest", "[WGANNetworkTest]")
 
   // Create the Discriminator network.
   FFN<EarthMoverDistance<> > discriminator;
-  discriminator.Add<Convolution<> >(1, dNumKernels, 4, 4, 2, 2, 1, 1, 28, 28);
-  discriminator.Add<LeakyReLU<> >(0.2);
-  discriminator.Add<Convolution<> >(dNumKernels, 2 * dNumKernels, 4, 4, 2, 2,
+  discriminator->Add<Convolution<> >(1, dNumKernels, 4, 4, 2, 2, 1, 1, 28, 28);
+  discriminator->Add<LeakyReLU<> >(0.2);
+  discriminator->Add<Convolution<> >(dNumKernels, 2 * dNumKernels, 4, 4, 2, 2,
       1, 1, 14, 14);
-  discriminator.Add<LeakyReLU<> >(0.2);
-  discriminator.Add<Convolution<> >(2 * dNumKernels, 4 * dNumKernels, 4, 4,
+  discriminator->Add<LeakyReLU<> >(0.2);
+  discriminator->Add<Convolution<> >(2 * dNumKernels, 4 * dNumKernels, 4, 4,
       2, 2, 1, 1, 7, 7);
-  discriminator.Add<LeakyReLU<> >(0.2);
-  discriminator.Add<Convolution<> >(4 * dNumKernels, 8 * dNumKernels, 4, 4,
+  discriminator->Add<LeakyReLU<> >(0.2);
+  discriminator->Add<Convolution<> >(4 * dNumKernels, 8 * dNumKernels, 4, 4,
       2, 2, 2, 2, 3, 3);
-  discriminator.Add<LeakyReLU<> >(0.2);
-  discriminator.Add<Convolution<> >(8 * dNumKernels, 1, 4, 4, 1, 1,
+  discriminator->Add<LeakyReLU<> >(0.2);
+  discriminator->Add<Convolution<> >(8 * dNumKernels, 1, 4, 4, 1, 1,
       1, 1, 2, 2);
-  discriminator.Add<SigmoidLayer<> >();
+  discriminator->Add<SigmoidLayer<> >();
 
   // Create the Generator network.
   FFN<EarthMoverDistance<> > generator;
-  generator.Add<TransposedConvolution<> >(noiseDim, 8 * dNumKernels, 2, 2,
+  generator->Add<TransposedConvolution<> >(noiseDim, 8 * dNumKernels, 2, 2,
       1, 1, 0, 0, 1, 1, 2, 2);
-  generator.Add<BatchNorm<> >(1024);
-  generator.Add<ReLULayer<> >();
-  generator.Add<TransposedConvolution<> >(8 * dNumKernels, 4 * dNumKernels,
+  generator->Add<BatchNorm<> >(1024);
+  generator->Add<ReLULayer<> >();
+  generator->Add<TransposedConvolution<> >(8 * dNumKernels, 4 * dNumKernels,
       2, 2, 1, 1, 0, 0, 2, 2, 3, 3);
-  generator.Add<BatchNorm<> >(1152);
-  generator.Add<ReLULayer<> >();
-  generator.Add<TransposedConvolution<> >(4 * dNumKernels, 2 * dNumKernels,
+  generator->Add<BatchNorm<> >(1152);
+  generator->Add<ReLULayer<> >();
+  generator->Add<TransposedConvolution<> >(4 * dNumKernels, 2 * dNumKernels,
       5, 5, 2, 2, 1, 1, 3, 3, 7, 7);
-  generator.Add<BatchNorm<> >(3136);
-  generator.Add<ReLULayer<> >();
-  generator.Add<TransposedConvolution<> >(2 * dNumKernels, dNumKernels, 4, 4,
+  generator->Add<BatchNorm<> >(3136);
+  generator->Add<ReLULayer<> >();
+  generator->Add<TransposedConvolution<> >(2 * dNumKernels, dNumKernels, 4, 4,
       2, 2, 1, 1, 7, 7, 14, 14);
-  generator.Add<BatchNorm<> >(6272);
-  generator.Add<ReLULayer<> >();
-  generator.Add<TransposedConvolution<> >(dNumKernels, 1, 4, 4, 2, 2, 1, 1,
+  generator->Add<BatchNorm<> >(6272);
+  generator->Add<ReLULayer<> >();
+  generator->Add<TransposedConvolution<> >(dNumKernels, 1, 4, 4, 2, 2, 1, 1,
       14, 14, 28, 28);
-  generator.Add<TanHLayer<> >();
+  generator->Add<TanHLayer<> >();
 
   // Create WGAN.
   GaussianInitialization gaussian(0, 1);
@@ -236,42 +236,42 @@ TEST_CASE("WGANGPMNISTTest", "[WGANNetworkTest]")
 
   // Create the Discriminator network.
   FFN<EarthMoverDistance<> > discriminator;
-  discriminator.Add<Convolution<> >(1, dNumKernels, 4, 4, 2, 2, 1, 1, 28, 28);
-  discriminator.Add<LeakyReLU<> >(0.2);
-  discriminator.Add<Convolution<> >(dNumKernels, 2 * dNumKernels, 4, 4, 2, 2,
+  discriminator->Add<Convolution<> >(1, dNumKernels, 4, 4, 2, 2, 1, 1, 28, 28);
+  discriminator->Add<LeakyReLU<> >(0.2);
+  discriminator->Add<Convolution<> >(dNumKernels, 2 * dNumKernels, 4, 4, 2, 2,
       1, 1, 14, 14);
-  discriminator.Add<LeakyReLU<> >(0.2);
-  discriminator.Add<Convolution<> >(2 * dNumKernels, 4 * dNumKernels, 4, 4,
+  discriminator->Add<LeakyReLU<> >(0.2);
+  discriminator->Add<Convolution<> >(2 * dNumKernels, 4 * dNumKernels, 4, 4,
       2, 2, 1, 1, 7, 7);
-  discriminator.Add<LeakyReLU<> >(0.2);
-  discriminator.Add<Convolution<> >(4 * dNumKernels, 8 * dNumKernels, 4, 4,
+  discriminator->Add<LeakyReLU<> >(0.2);
+  discriminator->Add<Convolution<> >(4 * dNumKernels, 8 * dNumKernels, 4, 4,
       2, 2, 2, 2, 3, 3);
-  discriminator.Add<LeakyReLU<> >(0.2);
-  discriminator.Add<Convolution<> >(8 * dNumKernels, 1, 4, 4, 1, 1,
+  discriminator->Add<LeakyReLU<> >(0.2);
+  discriminator->Add<Convolution<> >(8 * dNumKernels, 1, 4, 4, 1, 1,
       1, 1, 2, 2);
-  discriminator.Add<SigmoidLayer<> >();
+  discriminator->Add<SigmoidLayer<> >();
 
   // Create the Generator network.
   FFN<EarthMoverDistance<> > generator;
-  generator.Add<TransposedConvolution<> >(noiseDim, 8 * dNumKernels, 2, 2,
+  generator->Add<TransposedConvolution<> >(noiseDim, 8 * dNumKernels, 2, 2,
       1, 1, 0, 0, 1, 1, 2, 2);
-  generator.Add<BatchNorm<> >(1024);
-  generator.Add<ReLULayer<> >();
-  generator.Add<TransposedConvolution<> >(8 * dNumKernels, 4 * dNumKernels,
+  generator->Add<BatchNorm<> >(1024);
+  generator->Add<ReLULayer<> >();
+  generator->Add<TransposedConvolution<> >(8 * dNumKernels, 4 * dNumKernels,
       2, 2, 1, 1, 0, 0, 2, 2, 3, 3);
-  generator.Add<BatchNorm<> >(1152);
-  generator.Add<ReLULayer<> >();
-  generator.Add<TransposedConvolution<> >(4 * dNumKernels, 2 * dNumKernels,
+  generator->Add<BatchNorm<> >(1152);
+  generator->Add<ReLULayer<> >();
+  generator->Add<TransposedConvolution<> >(4 * dNumKernels, 2 * dNumKernels,
       5, 5, 2, 2, 1, 1, 3, 3, 7, 7);
-  generator.Add<BatchNorm<> >(3136);
-  generator.Add<ReLULayer<> >();
-  generator.Add<TransposedConvolution<> >(2 * dNumKernels, dNumKernels, 4, 4,
+  generator->Add<BatchNorm<> >(3136);
+  generator->Add<ReLULayer<> >();
+  generator->Add<TransposedConvolution<> >(2 * dNumKernels, dNumKernels, 4, 4,
       2, 2, 1, 1, 7, 7, 14, 14);
-  generator.Add<BatchNorm<> >(6272);
-  generator.Add<ReLULayer<> >();
-  generator.Add<TransposedConvolution<> >(dNumKernels, 1, 4, 4, 2, 2, 1, 1,
+  generator->Add<BatchNorm<> >(6272);
+  generator->Add<ReLULayer<> >();
+  generator->Add<TransposedConvolution<> >(dNumKernels, 1, 4, 4, 2, 2, 1, 1,
       14, 14, 28, 28);
-  generator.Add<TanHLayer<> >();
+  generator->Add<TanHLayer<> >();
 
   // Create WGANGP.
   GaussianInitialization gaussian(0, 1);

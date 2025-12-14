@@ -50,35 +50,36 @@ TEST_CASE("GANTest", "[GANNetworkTest]")
   trainData = arma::sort(trainData);
 
   // Create the Discriminator network.
-  FFN<SigmoidCrossEntropyError<> > discriminator;
-  discriminator.Add<Linear<> > (
+  FFN<SigmoidCrossEntropyError<> > *discriminator = new FFN<SigmoidCrossEntropyError<>>;
+  discriminator->Add<Linear<> > (
       generatorOutputSize, discriminatorHiddenLayerSize * 2);
-  discriminator.Add<ReLULayer<> >();
-  discriminator.Add<Linear<> > (
+  discriminator->Add<ReLULayer<> >();
+  discriminator->Add<Linear<> > (
       discriminatorHiddenLayerSize * 2, discriminatorHiddenLayerSize * 2);
-  discriminator.Add<ReLULayer<> >();
-  discriminator.Add<Linear<> > (
+  discriminator->Add<ReLULayer<> >();
+  discriminator->Add<Linear<> > (
       discriminatorHiddenLayerSize * 2, discriminatorHiddenLayerSize * 2);
-  discriminator.Add<ReLULayer<> >();
-  discriminator.Add<Linear<> > (
+  discriminator->Add<ReLULayer<> >();
+  discriminator->Add<Linear<> > (
       discriminatorHiddenLayerSize * 2, discriminatorOutputSize);
 
   // Create the Generator network.
-  FFN<SigmoidCrossEntropyError<> > generator;
-  generator.Add<Linear<> >(noiseDim, generatorHiddenLayerSize);
-  generator.Add<SoftPlusLayer<> >();
-  generator.Add<Linear<> >(generatorHiddenLayerSize, generatorOutputSize);
+  FFN<SigmoidCrossEntropyError<> > *generator = new FFN<SigmoidCrossEntropyError<>>;
+  generator->Add<Linear<> >(noiseDim, generatorHiddenLayerSize);
+  generator->Add<SoftPlusLayer<> >();
+  generator->Add<Linear<> >(generatorHiddenLayerSize, generatorOutputSize);
 
-  // Create GAN.
+  // Create GAN
   GaussianInitialization gaussian(0, 0.1);
   std::function<double ()> noiseFunction = [](){ return Random(-8, 8) +
       RandNormal(0, 1) * 0.01;};
   GAN<FFN<SigmoidCrossEntropyError<> >,
       GaussianInitialization,
       std::function<double()> >
-  gan(generator, discriminator, gaussian, noiseFunction, noiseDim, batchSize,
+  *gan = new GAN<FFN<SigmoidCrossEntropyError<>>, GaussianInitialization, std::function<double()>>
+    (generator, discriminator, gaussian, noiseFunction, noiseDim, batchSize,
       generatorUpdateStep, discriminatorPreTrain, multiplier);
-  gan.ResetData(trainData);
+  gan->ResetData(trainData);
 
   Log::Info << "Loading Parameters" << std::endl;
   arma::mat parameters, generatorParameters;
@@ -97,7 +98,7 @@ TEST_CASE("GANTest", "[GANNetworkTest]")
     arma::mat samples;
     noise.imbue( [&]() { return noiseFunction(); } );
 
-    gan.Generator().Forward(noise, samples);
+    gan->Generator().Forward(noise, samples);
     samples.reshape(dim, dim);
     samples = samples.t();
 
@@ -169,34 +170,34 @@ TEST_CASE("GANMNISTTest", "[GANNetworkTest]")
   Log::Info << trainData.n_rows << "--------" << trainData.n_cols << std::endl;
 
   // Create the Discriminator network.
-  FFN<SigmoidCrossEntropyError<> > discriminator;
-  discriminator.Add<Convolution<> >(1, dNumKernels, 5, 5, 1, 1, 2, 2, 28, 28);
-  discriminator.Add<ReLULayer<> >();
-  discriminator.Add<MeanPooling<> >(2, 2, 2, 2);
-  discriminator.Add<Convolution<> >(dNumKernels, 2 * dNumKernels, 5, 5, 1, 1,
+  FFN<SigmoidCrossEntropyError<> > *discriminator = new FFN<SigmoidCrossEntropyError<>>();
+  discriminator->Add<Convolution<> >(1, dNumKernels, 5, 5, 1, 1, 2, 2, 28, 28);
+  discriminator->Add<ReLULayer<> >();
+  discriminator->Add<MeanPooling<> >(2, 2, 2, 2);
+  discriminator->Add<Convolution<> >(dNumKernels, 2 * dNumKernels, 5, 5, 1, 1,
       2, 2, 14, 14);
-  discriminator.Add<ReLULayer<> >();
-  discriminator.Add<MeanPooling<> >(2, 2, 2, 2);
-  discriminator.Add<Linear<> >(7 * 7 * 2 * dNumKernels, 1024);
-  discriminator.Add<ReLULayer<> >();
-  discriminator.Add<Linear<> >(1024, 1);
+  discriminator->Add<ReLULayer<> >();
+  discriminator->Add<MeanPooling<> >(2, 2, 2, 2);
+  discriminator->Add<Linear<> >(7 * 7 * 2 * dNumKernels, 1024);
+  discriminator->Add<ReLULayer<> >();
+  discriminator->Add<Linear<> >(1024, 1);
 
   // Create the Generator network.
   FFN<SigmoidCrossEntropyError<> > generator;
-  generator.Add<Linear<> >(noiseDim, 3136);
-  generator.Add<BatchNorm<> >(3136);
-  generator.Add<ReLULayer<> >();
-  generator.Add<Convolution<> >(1, noiseDim / 2, 3, 3, 2, 2, 1, 1, 56, 56);
-  generator.Add<BatchNorm<> >(39200);
-  generator.Add<ReLULayer<> >();
-  generator.Add<BilinearInterpolation<> >(28, 28, 56, 56, noiseDim / 2);
-  generator.Add<Convolution<> >(noiseDim / 2, noiseDim / 4, 3, 3, 2, 2, 1, 1,
+  generator->Add<Linear<> >(noiseDim, 3136);
+  generator->Add<BatchNorm<> >(3136);
+  generator->Add<ReLULayer<> >();
+  generator->Add<Convolution<> >(1, noiseDim / 2, 3, 3, 2, 2, 1, 1, 56, 56);
+  generator->Add<BatchNorm<> >(39200);
+  generator->Add<ReLULayer<> >();
+  generator->Add<BilinearInterpolation<> >(28, 28, 56, 56, noiseDim / 2);
+  generator->Add<Convolution<> >(noiseDim / 2, noiseDim / 4, 3, 3, 2, 2, 1, 1,
       56, 56);
-  generator.Add<BatchNorm<> >(19600);
-  generator.Add<ReLULayer<> >();
-  generator.Add<BilinearInterpolation<> >(28, 28, 56, 56, noiseDim / 4);
-  generator.Add<Convolution<> >(noiseDim / 4, 1, 3, 3, 2, 2, 1, 1, 56, 56);
-  generator.Add<TanHLayer<> >();
+  generator->Add<BatchNorm<> >(19600);
+  generator->Add<ReLULayer<> >();
+  generator->Add<BilinearInterpolation<> >(28, 28, 56, 56, noiseDim / 4);
+  generator->Add<Convolution<> >(noiseDim / 4, 1, 3, 3, 2, 2, 1, 1, 56, 56);
+  generator->Add<TanHLayer<> >();
 
   // Create GAN.
   GaussianInitialization gaussian(0, 1);
@@ -302,23 +303,23 @@ TEST_CASE("GANMemorySharingTest", "[GANNetworkTest]")
 
   // Create the Discriminator network.
   FFN<SigmoidCrossEntropyError<> > discriminator;
-  discriminator.Add<Linear<> > (
+  discriminator->Add<Linear<> > (
       generatorOutputSize, discriminatorHiddenLayerSize * 2);
-  discriminator.Add<ReLULayer<> >();
-  discriminator.Add<Linear<> > (
+  discriminator->Add<ReLULayer<> >();
+  discriminator->Add<Linear<> > (
       discriminatorHiddenLayerSize * 2, discriminatorHiddenLayerSize * 2);
-  discriminator.Add<ReLULayer<> >();
-  discriminator.Add<Linear<> > (
+  discriminator->Add<ReLULayer<> >();
+  discriminator->Add<Linear<> > (
       discriminatorHiddenLayerSize * 2, discriminatorHiddenLayerSize * 2);
-  discriminator.Add<ReLULayer<> >();
-  discriminator.Add<Linear<> > (
+  discriminator->Add<ReLULayer<> >();
+  discriminator->Add<Linear<> > (
       discriminatorHiddenLayerSize * 2, discriminatorOutputSize);
 
   // Create the Generator network.
   FFN<SigmoidCrossEntropyError<> > generator;
-  generator.Add<Linear<> >(noiseDim, generatorHiddenLayerSize);
-  generator.Add<SoftPlusLayer<> >();
-  generator.Add<Linear<> >(generatorHiddenLayerSize, generatorOutputSize);
+  generator->Add<Linear<> >(noiseDim, generatorHiddenLayerSize);
+  generator->Add<SoftPlusLayer<> >();
+  generator->Add<Linear<> >(generatorHiddenLayerSize, generatorOutputSize);
 
   // Create GAN.
   GaussianInitialization gaussian(0, 0.1);
