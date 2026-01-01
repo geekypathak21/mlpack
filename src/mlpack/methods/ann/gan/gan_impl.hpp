@@ -59,9 +59,18 @@ GAN<Model, InitializationRuleType, Noise, PolicyType, MatType>::GAN(
     discWeights(0)
 {
   // Insert IdentityLayer for joining the Generator and Discriminator.
-  this->discriminator.network.Network().insert(
-      this->discriminator.network.Network().begin(),
-      new Identity<MatType>());
+  // We need to do this carefully; we can't just insert into the network,
+  // because that will mess up the internal state of the MultiLayer.
+  std::vector<Layer<MatType>*> network =
+      this->discriminator.network.Network();
+  this->discriminator.network.Network().clear();
+
+  // Reset the discriminator.
+  this->discriminator.network = MultiLayer<MatType>();
+  this->discriminator.network.Add(new Identity<MatType>());
+
+  for (size_t i = 0; i < network.size(); ++i)
+    this->discriminator.network.Add(network[i]);
 }
 
 template<

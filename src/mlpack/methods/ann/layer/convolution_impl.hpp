@@ -99,7 +99,8 @@ Convolution<
     padWRight(std::get<1>(padW)),
     padHBottom(std::get<1>(padH)),
     padHTop(std::get<0>(padH)),
-    useBias(useBias)
+    useBias(useBias),
+    inMaps(0)
 {
   // Transform paddingType to lowercase.
   this->paddingType = util::ToLower(paddingTypeIn);
